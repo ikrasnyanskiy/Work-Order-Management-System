@@ -1,0 +1,53 @@
+﻿@model WorkOrderManagementSystem.Controllers.BicycleGeneral
+
+@{
+    ViewBag.Title = "Details";
+
+    int bikeId = Model.Id;
+    string firstName = Model.CustomerFirstName;
+    string lastName = Model.CustomerLastName;
+    string phone = Model.CustomerPhone;
+    string email = Model.CustomerEmail;
+    string manuName = Model.ManufacturerName;
+    string modName = Model.ModelName;
+}
+
+<h2>Details</h2>
+
+<div>
+    <h3>Bike @bikeId</h3>
+    <h3>For Customer:</h3>
+    <h4>@firstName @lastName</h4>
+    <h4>@phone</h4>
+    <h4>@email</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        
+        @Html.HiddenFor(model => model.CustomerId)
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ManufacturerName)
+        </dt>
+
+        <dd>
+            @manuName
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ModelName)
+        </dt>
+
+        <dd>
+            @modName
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+    </dl>
+</div>

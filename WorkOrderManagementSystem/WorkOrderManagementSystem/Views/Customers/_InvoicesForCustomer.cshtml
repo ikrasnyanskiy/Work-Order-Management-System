@@ -1,0 +1,59 @@
+﻿@model IEnumerable<WorkOrderManagementSystem.Controllers.InvoiceBase>
+
+
+
+
+<table class="table">
+    <tr>
+        <th>
+           Has Been Paid?
+        </th>
+        <th>
+            Work Order Id
+        </th>
+        <th>
+            Manufacturer
+        </th>
+        <th>
+            Model Name
+        </th>
+        <th>
+            Bicycle Description
+        </th>
+        <th>
+          Invoice Created On
+        </th>
+       
+    </tr>
+@{string paidCheck = ""; }
+@foreach (var item in Model) {
+    @*Status Checkbox *@
+    if (item.IsPaid == true)
+    {
+        paidCheck = "checked";
+    }
+    <tr>
+        <td>
+            <input type="checkbox" onclick="changePaidStatus(@item.Id)" @paidCheck />
+           @* @Html.DisplayFor(modelItem => item.IsPaid)*@
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.WorkOrderId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BicycleModelManufacturerName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BicycleModelName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BicycleDescription)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreationTime)
+        </td>
+        
+    </tr>
+}
+
+</table>

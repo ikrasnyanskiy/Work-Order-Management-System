@@ -1,0 +1,39 @@
+@model IEnumerable<WorkOrderManagementSystem.Controllers.WorkOrderGeneral>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Work Orders In Action</h2>
+
+@*<p>
+      @Html.ActionLink("Create New", "Create")
+  </p>*@
+
+@*Nested tables to hold the view of the work order
+  first table will work order
+  nested in second column is customer details table
+*@
+
+<<<<<<< HEAD
+<div class="form-group">
+    <h3>Search Work Orders</h3>
+    <input type="text" id="workOrderSearchBox" name="workOrderSearchBox" class="col-md-2" />
+    <input type="button" value="Search" class="btn btn-default col-md-2" onclick="searchWorkOrder(workOrderSearchBox.value)" />
+=======
+<div class="form-group">
+    <h3>Search Work Orders</h3>
+    <input type="text" id="workOrderSearchBox" name="workOrderSearchBox" class="col-md-2" />
+    <input type="button" value="Search" class="btn btn-default col-md-2" onclick="searchWorkOrder(workOrderSearchBox.value)" />
+>>>>>>> 4d41b0dee3981c841093d9a2d8af3bc87aba1f45
+    <br /><br />
+</div>
+
+<div id="WorkOrderTable">
+    @Html.Partial("_WorkOrderIndexTable")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/App/core.js"></script>
+}

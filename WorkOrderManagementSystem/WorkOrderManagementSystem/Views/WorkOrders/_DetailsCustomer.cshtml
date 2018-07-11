@@ -1,0 +1,49 @@
+﻿@model WorkOrderManagementSystem.Controllers.CustomerBase
+
+@{
+    ViewBag.Title = "Details";
+    string name = Model.FirstName;
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Here are @name's contact details:</h4>
+    <hr />
+    <dl class="dl-horizontal">
+
+
+        <dt>
+            First Name
+        </dt>
+
+        <dd id="detailsCustomerFirstName">
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            Last Name
+        </dt>
+
+        <dd id="detailsCustomerLastName">
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            Phone
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Phone)
+        </dd>
+
+        <dt>
+            Email
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+    </dl>
+</div>

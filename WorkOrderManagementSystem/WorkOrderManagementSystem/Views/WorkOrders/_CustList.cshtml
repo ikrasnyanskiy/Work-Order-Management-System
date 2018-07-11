@@ -1,0 +1,5 @@
+﻿@model WorkOrderManagementSystem.Controllers.WorkOrderPartial
+
+
+
+@Html.DropDownList("CustomerId", Model.CustomerSearchList, new { @class = "form-control", @size = "10", @onchange = "getBikeList(this)" })

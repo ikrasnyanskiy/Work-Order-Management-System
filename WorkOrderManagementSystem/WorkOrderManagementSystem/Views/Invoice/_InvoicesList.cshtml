@@ -1,0 +1,100 @@
+﻿@model IEnumerable<WorkOrderManagementSystem.Controllers.InvoiceWithDetails>
+<p>
+    @*add some control logic to create an error message at the top if the page didn't load right. *@
+    <span>You cannot see the Invoice because it has not been created. Please try again</span>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Payment Received:
+        </th>
+        <th>
+            Work Order#:
+        </th>
+        <th>
+            Customer Id:
+        </th>
+        <th>
+            Customer First Name
+        </th>
+        <th>
+            Customer Last Name
+        </th>
+        <th>
+            Customer Email
+        </th>
+        <th>
+            Customer Phone Number
+        </th>
+        <th>
+            Bicycle Description
+        </th>
+        <th>
+            Model Name
+        </th>
+        <th>
+            Manufacturer Name
+        </th>
+        <th>
+            Invoice was opened:
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Subtotal)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Total)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsPaid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WorkOrderId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerFirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerLastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerEmail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerPhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BicycleDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BicycleModelName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BicycleModelManufacturerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreationTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Subtotal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Total)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>

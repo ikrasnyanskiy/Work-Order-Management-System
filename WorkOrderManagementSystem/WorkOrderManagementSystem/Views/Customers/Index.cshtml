@@ -1,0 +1,28 @@
+﻿@model IEnumerable<WorkOrderManagementSystem.Controllers.CustomerGeneral>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>List of Customers</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<div class="form-group">
+    <h3>Search Customers</h3>
+    <input style="margin-right:10px;margin-top:4px" type="text" id="customerSearchBox" name="customerSearchBox" class="col-md-2" />
+    <input type="button" value="Search" class="btn btn-default col-md-2" onclick="searchCustomer(customerSearchBox.value)" />
+    <br /><br />
+</div>
+
+
+
+<div id="CustomerTable">
+    @Html.Partial("_CustomerIndexTable")
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/App/core.js"></script>
+}

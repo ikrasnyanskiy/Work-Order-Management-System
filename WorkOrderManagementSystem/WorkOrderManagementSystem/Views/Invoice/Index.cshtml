@@ -1,0 +1,95 @@
+﻿@model IEnumerable<WorkOrderManagementSystem.Controllers.InvoiceBase>
+
+@{
+    ViewBag.Title = "Invoices";
+}
+<script src="~/Scripts/App/core.js"></script> 
+<h2>All Invoices In System</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            Payment Made?
+        </th>
+        <th>
+            Work Order Id
+        </th>
+
+        <th>
+            First Name
+        </th>
+        <th>
+            Last Name
+        </th>
+        <th>
+            Email
+        </th>
+        <th>
+            Phone Number
+        </th>
+        <th>
+            Bicycle Description
+        </th>
+        <th>
+            Model Name
+        </th>
+        <th>
+            Manufacturer
+        </th>
+        <th>
+            First Created
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+       string paid = item.IsPaid == false ? "alert-danger" : null; 
+        <tr class="@paid">
+            <td>
+                @{
+                    string chek = "";
+                    if (item.IsPaid == true)
+                    {
+                        chek = "checked";
+                    }
+                }
+                <input type="checkbox" onclick="changePaidStatus(@item.Id)" @chek />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WorkOrderId)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerFirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerLastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerEmail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerPhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BicycleDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BicycleModelName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BicycleModelManufacturerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreationTime)
+            </td>
+            <td>
+
+                @Html.ActionLink("Details", "Details", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>

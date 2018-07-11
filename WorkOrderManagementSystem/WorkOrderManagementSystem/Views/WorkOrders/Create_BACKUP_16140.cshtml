@@ -1,0 +1,115 @@
+﻿@model WorkOrderManagementSystem.Controllers.WorkOrderAddForm
+
+@{
+  ViewBag.Title = "Create A New Work Order";
+}
+
+<h2>Create A New Work Order</h2>
+
+
+@using (Html.BeginForm(new { @onkeypress = "function(event){if(event.keyCode==13 || event.which==13){event.preventDefault; event.stopPropagation;}};" }))
+{
+  @Html.AntiForgeryToken()
+
+  <div class="form-horizontal" defaultbutton="none" >
+    <hr />
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group row col-md-12" style="align-content: center" defaultbutton="none">
+     
+      <label class="control-label col-sm-2" for="HighPriority">Set As High Priority</label>
+
+      <div class="checkbox col-sm-1">
+        @Html.EditorFor(model => model.HighPriority)
+        @Html.ValidationMessageFor(model => model.HighPriority, "", new { @class = "text-danger"})
+
+      </div>
+
+     
+      <label class="control-label col-sm-2" for="Status">Mark As Completed</label>
+      <div class="checkbox col-sm-1">
+        @Html.EditorFor(model => model.Status)
+        @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+      </div>
+    </div>
+    <br>
+    <br>
+    <hr />
+    <div class="col-md-12 row">
+      <label class="control-label  col-md-2" for="CustomerId">Select A Customer</label>
+    </div>
+    <br />
+    <div class="col-md-12 " id="custList">
+      <div>
+       
+<<<<<<< HEAD
+        <input type="text" id="custSearchBox" name="custSearchBox" class="col-md-2" onkeypress="submitSearch(event)"/>
+        <input type="button" value="Search" class="btn btn-default" onclick="searchCust(custSearchBox.value)" /> <p>Submit with no value to reset search</p>
+=======
+        <input type="text" id="custSearchBox" name="custSearchBox" class="col-md-2" onkeypress="submitSearch(event)" defaultbutton="custSearchBtn"/>
+        <input type="button" value="Search" class="btn btn-default" id="custSearchBtn" onclick="searchCust(custSearchBox.value)" />
+>>>>>>> 53aa5595c525b8d5ae5258ed1fea841fbc678907
+      </div>
+      
+      @Html.DropDownList("CustomerId", Model.CustomerSearchList, new { @class = "form-control", @size = "10", @onchange = "getBikeList(this)" })
+    </div>
+
+    <hr />
+    <div class="col-md-12" id="bikeList">
+      <div class="form-group">
+        <label class="control-label row">Select Customer to See Related Bikes</label>
+        <div class="col-md-12">
+          
+          <br/>
+          @Html.DropDownListFor(m => m.BicycleId, (Model.BicycleSearchList), new { @class = "form-control", @size = "10" })
+          @Html.ValidationMessageFor(model => model.BicycleId, "", new { @class = "text-danger" })
+        </div>
+      </div>
+
+    </div>
+    <hr />
+    <div class="form-group">
+      @Html.LabelFor(model => model.Notes, htmlAttributes: new { @class = "control-label" })
+      <div>
+        @Html.TextBoxFor(model => model.Notes, new { htmlAttributes = new { @class = "form-control", @style = "width: 400px; " } })
+        @Html.ValidationMessageFor(model => model.Notes, "", new { @class = "text-danger" })
+      </div>
+    </div>
+    <hr />
+    <label class="control-label row" for="ActiveMechanicList">Assign a Mechanic (Optional)</label>
+    <br />
+    <div class="form-group col-sm-12">
+<<<<<<< HEAD
+      <input type="text" id="mechSearchBox" name="mechSearchBox" class="col-md-2" onkeypress="submitSearch(event)"/>
+      <input type="button" value="Search" class="btn btn-default col-md-2" onclick="searchMech(mechSearchBox.value)" /> <p>Submit with no value to reset search </p>
+      <input type="button" value="Clear" class="btn btn-default col-md-2" onclick="clearSelected()" /> Submit with no mechanic assigned
+=======
+      <input type="text" id="mechSearchBox" name="mechSearchBox" class="col-md-2" onkeypress="submitSearch(event)" defaultbutton="mechSearchBtn"/>
+      <input type="button" id="mechSearchBtn" value="Search" class="btn btn-default col-md-2" onclick="searchMech(mechSearchBox.value)" />
+>>>>>>> 53aa5595c525b8d5ae5258ed1fea841fbc678907
+
+      
+      <div class="col-md-10" id="mechList">
+        @Html.DropDownList("ActiveMechanicId", Model.MechanicSearchList, new { @class = "form-control", @size = "10" })
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <div class="col-md-offset-2 col-md-10">
+          <input type="submit" value="Save" id="submit" class="btn" onload="this.blur()" />
+          <p>You can choose to add lines after saving</p>
+      </div>
+    </div>
+  </div>
+}
+
+<div>
+  @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+  @Scripts.Render("~/bundles/jqueryval")
+  <script src="~/Scripts/App/core.js"></script>
+
+}

@@ -1,0 +1,9 @@
+﻿@model WorkOrderManagementSystem.Controllers.WorkOrderPartial
+
+<div class="form-group">
+  <div class="col-md-10">
+
+    @Html.DropDownList("MechanicId", Model.MechanicSearchList, new { @class = "form-control", @size = "10" })
+
+  </div>
+</div>

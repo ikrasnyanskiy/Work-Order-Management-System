@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - OSFK-WOMS </title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Work Order Management System", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            Work Orders
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Start New Work Order", "Create", "WorkOrders")</li>
+                            <li>@Html.ActionLink("View Active", "Index", "WorkOrders")</li>
+
+                            <li>@Html.ActionLink("View Completed", "GetAllCompletedWO", "WorkOrders")</li>
+                            <li>@Html.ActionLink("View All", "GetAllWorkorders", "WorkOrders")</li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            Customers
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Create New Customer", "Create", "Customers")</li>
+                            <li>@Html.ActionLink("View All Customers", "Index", "Customers")</li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            Mechanics
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            @*Mechanic Menu*@
+<<<<<<< HEAD
+                        <li>@Html.ActionLink("Create New Mechanic", "Create", "Mechanics")</li>
+                        <li>@Html.ActionLink("View All Mechanics", "Index", "Mechanics")</li>
+                    </ul>
+                </li>
+
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            Invoices
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            @*Invoice Menu*@
+                            <li>@Html.ActionLink("Invoices", "Create", "Invoice")</li>
+                            <li>@Html.ActionLink("Coming Soon ~ Rejections", "Index", "Invoices")</li>
+                        </ul>
+                    </li>
+
+=======
+                            <li>@Html.ActionLink("Create New Mechanic", "Create", "Mechanics")</li>
+                            <li>@Html.ActionLink("View All Mechanics", "Index", "Mechanics")</li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            Models / Manufacturers
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("List of Manufacturers", "Index", "Manufacturers")</li>
+                            <li>@Html.ActionLink("List of Models", "Index", "BikeModels")</li>
+                        </ul>
+                    </li>
+>>>>>>> eaade361120182f3e3cbd0a5f9847aba5c31c0a5
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Group 9(Michael Overall, Tanvir Sarkar, Dan Foster, Igor Krasnyanskiy)</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,284 @@
+﻿@model WorkOrderManagementSystem.Controllers.WorkOrderAddForm
+
+@{
+  ViewBag.Title = "Create A New Work Order";
+}
+
+<h2>Create A New Work Order</h2>
+<p class="text-danger">
+  @TempData["SubmitErrorMsg"]
+</p>
+
+@using (Html.BeginForm(new { @onkeypress = "function(event){if(event.keyCode==13 || event.which==13){event.preventDefault(); event.stopPropagation();}};" }))
+{
+  @Html.AntiForgeryToken()
+  <div class="form-horizontal" defaultbutton="none" >
+    <hr />
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group row col-md-12" style="align-content: center" defaultbutton="none">
+     
+      <label class="control-label col-sm-2" for="HighPriority">Set As High Priority</label>
+
+      <div class="checkbox col-sm-1">
+        @Html.EditorFor(model => model.HighPriority)
+        @Html.ValidationMessageFor(model => model.HighPriority, "", new { @class = "text-danger"})
+
+      </div>
+
+     
+      <label class="control-label col-sm-2" for="Status">Mark As Completed</label>
+      <div class="checkbox col-sm-1">
+        @Html.EditorFor(model => model.IsCompleted)
+        @Html.ValidationMessageFor(model => model.IsCompleted, "", new { @class = "text-danger" })
+      </div>
+    </div>
+    <br>
+    <br>
+    <hr />
+    <div class="col-md-12 row">
+      <label class="control-label  col-md-2" for="CustomerId">Select A Customer</label>
+      @* Create new customer through create workorder form *@
+    <button type="button" id="createCustBtn" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="getCustCreateForModal()">
+        Create New Customer
+    </button>
+    </div>
+    <br />
+    <div class="col-md-12 " >
+      <div>
+        <input type="text" id="custSearchBox" name="custSearchBox" value="set empty to see all" class="col-md-2" onkeypress="submitSearch(event)" defaultbutton="custSearchBtn"/>
+        <input type="button" value="Search" class="btn btn-default" id="custSearchBtn" onclick="searchCust(custSearchBox.value)" />
+      </div>
+      <div id="custList">
+        @Html.DropDownList("CustomerId", Model.CustomerSearchList, new { @class = "form-control", @size = "10", @onchange = "getBikeList(this); showBikeCreateDiv()", @onmouseover = "getBikeList(this)" })
+      </div>
+    </div>
+
+    <hr />
+    <div class="col-md-12" id="bikeList">
+      <div class="form-group">
+        <label class="control-label row">Select Customer to See Related Bikes</label>
+        <div class="col-md-12">
+          
+          <br/>
+          @Html.DropDownListFor(m => m.BicycleId, (Model.BicycleSearchList), new { @class = "form-control", @size = "10" })
+          @Html.ValidationMessageFor(model => model.BicycleId, "", new { @class = "text-danger" })
+        </div>
+      </div>
+    </div>
+
+    <div id="createBikeDiv" style="visibility:hidden">
+        @* Create new bicycle through create workorder form *@
+        <button type="button" id="createBikeBtn" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal2" onclick="getBikeCreateForModal(document.getElementById('CustomerId').options[document.getElementById('CustomerId').selectedIndex].value)">
+            Create New Bicycle for Selected Customer
+        </button>
+    </div>
+    @*<div>
+        <label class="control-label row">Selected Customer: </label>
+        document.getElementById("CustomerId").options[document.getElementById("CustomerId").selectedIndex].value
+    </div>*@
+
+    <hr />
+    <div class="form-group">
+      @Html.LabelFor(model => model.Notes, htmlAttributes: new { @class = "control-label" })
+      <div>
+        @Html.TextAreaFor(model => model.Notes, new { @rows = 5, @cols = 70, htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Notes, "", new { @class = "text-danger" })
+      </div>
+    </div>
+    <hr />
+    <label class="control-label row" for="ActiveMechanicList">Assign a Mechanic (Optional)</label>
+    <br />
+    <div class="form-group col-sm-12">
+      <input type="text" id="mechSearchBox" name="mechSearchBox" value="set empty to see all" class="col-md-2" onkeypress="submitSearch(event)" defaultbutton="mechSearchBtn"/>
+      <input type="button" id="mechSearchBtn" value="Search" class="btn btn-default col-md-2" onclick="searchMech(mechSearchBox.value)" />
+      <input type="button" value="Clear" class="btn btn-default col-md-2" onclick="clearSelected()" /> Submit with no mechanic assigned
+
+      
+      <div class="col-md-10" id="mechList">
+        @Html.DropDownList("MechanicId", Model.MechanicSearchList, new { @class = "form-control", @size = "10" })
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <div class="col-md-offset-2 col-md-10">
+          <input type="submit" value="Save" id="submitCreate" class="btn" onload="this.blur()" />
+          <p>You can choose to add lines after saving</p>
+        <p class="text-danger">
+          @TempData["SubmitErrorMsg"]
+        </p>
+      </div>
+    </div>
+  </div>
+}
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Create Customer</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="createCustModal" class="modal-body">
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel2">Create Bicycle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="createBikeModal" class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/App/core.js"></script>
+    <script src="~/scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+    @*<script>
+        $(document).ready(function () {
+            $("#submitCreate").click(function () {
+                $("form").attr("action", "/workorders/create");
+            });
+        });
+    </script>*@
+
+    <script>
+        function showBikeCreateDiv() {
+            var e = document.getElementById("createBikeDiv");
+            e.style.visibility = "visible";
+        }
+
+        function getCustCreateForModal() {
+            // Get a reference to the DOM element
+            var element = document.querySelector('#createCustModal');
+            // create an xhr object
+            var xhr = new XMLHttpRequest();
+            // configure its handler
+            xhr.onreadystatechange = function () {
+
+                if (xhr.readyState === 4) {
+                    // request-response cycle has been completed, so continue
+
+                    if (xhr.status === 200) {
+                        // request was successfully completed, and data was received, so continue
+
+                        // update the user interface
+                        element.innerHTML = xhr.responseText;
+                    } else {
+                        element.innerHTML = "<p>Request was not successful<br>(" + xhr.statusText + ")</p>";
+                    }
+                } else {
+                    //e.innerHTML = "<p>Loading...</p>";
+                }
+                // show the content
+                element.style.display = 'block';
+            }
+
+            // configure the xhr object to fetch content
+            xhr.open('GET', '/WorkOrders/createCustomerThroughWO', true);//TODO: ADDED GET style variable syntax to request URL to allow controller to recognize variable
+            // fetch the content
+            xhr.send(null);
+        }
+
+        function getBikeCreateForModal(custId) {
+            // Get a reference to the DOM element
+            var element = document.querySelector('#createBikeModal');
+            // create an xhr object
+            var xhr = new XMLHttpRequest();
+            // configure its handler
+            xhr.onreadystatechange = function () {
+
+                if (xhr.readyState === 4) {
+                    // request-response cycle has been completed, so continue
+
+                    if (xhr.status === 200) {
+                        // request was successfully completed, and data was received, so continue
+
+                        // update the user interface
+                        element.innerHTML = xhr.responseText;
+                    } else {
+                        element.innerHTML = "<p>Request was not successful<br>(" + xhr.statusText + ")</p>";
+                    }
+                } else {
+                    //e.innerHTML = "<p>Loading...</p>";
+                }
+                // show the content
+                element.style.display = 'block';
+            }
+
+            // configure the xhr object to fetch content
+            xhr.open('GET', '/WorkOrders/createBicycleThroughWO/?id=' + custId, true);//TODO: ADDED GET style variable syntax to request URL to allow controller to recognize variable
+            // fetch the content
+            xhr.send(null);
+        }
+    </script>
+
+    <script>
+        function updateCustModal(in_data, in_status, in_xhr) {
+
+            // Get a reference to the DOM element
+            var element = document.querySelector('#createCustModal');
+
+            // create an xhr object
+            var xhr = in_xhr
+           
+            element.innerHTML = xhr.responseText;
+
+            var parser = new DOMParser();
+            var data = parser.parseFromString(xhr.responseText, "text/html");
+            var firstNameElem = data.getElementById('detailsCustomerFirstName');
+            var lastNameElem = data.getElementById('detailsCustomerLastName');
+            if (firstNameElem != null && lastNameElem != null)
+            {
+                searchCust((firstNameElem.innerHTML).trim() + " " + (lastNameElem.innerHTML).trim());
+            }
+
+            showBikeCreateDiv();
+        }
+
+        function updateBikeModal(in_data, in_status, in_xhr) {
+
+            // Get a reference to the DOM element
+            var element = document.querySelector('#createBikeModal');
+
+            // create an xhr object
+            var xhr = in_xhr
+
+            element.innerHTML = xhr.responseText;
+
+            var parser = new DOMParser();
+            var data = parser.parseFromString(xhr.responseText, "text/html");
+            var custId = data.getElementById('CustomerId').valueOf();
+
+            //getBikeList(document.getElementById('CustomerId').options[document.getElementById('CustomerId').selectedIndex].value);
+            getBikeList(custId);
+        }
+    </script>
+}

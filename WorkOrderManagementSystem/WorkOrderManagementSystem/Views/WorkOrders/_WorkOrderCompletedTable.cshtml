@@ -1,0 +1,102 @@
+﻿@model IEnumerable<WorkOrderManagementSystem.Controllers.WorkOrderGeneral>
+<table class="table">
+    @*table
+        work order id, customer_nested , work order notes, bicycle_id, bicycle_description, work_order_status *@
+    <tr>
+        <th>
+            Work Order #
+        </th>
+        <th>
+            Customer Details
+        </th>
+        <th>
+            Work Order Notes
+        </th>
+        <th>
+            Bicycle #
+        </th>
+        <th>
+            Bicycle Description
+        </th>
+        <th>
+            Completion Status (click to change)
+        </th>
+    </tr>
+    @{int firstInv = 0; }  @*//setting this to true on first print, after check if set, and refer to it if the first one is made*@
+    @foreach (var item in Model)
+    {
+        @*use string priority and terinary to either set background of row to red or null*@
+    string priority = item.HighPriority == true ? "alert-danger" : null;
+    @*Status Checkbox *@
+    string check = "";
+    string invoiceAble = ""; //used to populate the Print Invoice Action Link, only when the  IsCompleted Box is checked
+    if (item.IsCompleted == true)
+        {
+            check = "checked";
+            // invoiceAble ="@Html.ActionLink(\"Print Invoice\", \"../Invoice/Create\", new { id = item.Id}) |"; //<---fix this one
+
+        }
+    <tr class="@priority" id="@item.Id">
+        <td>
+            @Html.DisplayFor(modelItem => item.Id)
+        </td>
+        <td>
+            <table>
+                <tr>
+                    <th> Name</th>
+                    <td>@(item.BicycleCustomerFirstName + " " + item.BicycleCustomerLastName)</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>@item.BicycleCustomerEmail</td>
+                </tr>
+                <tr>
+                    <th>Phone</th>
+                    <td>@item.BicycleCustomerPhone.ToString()</td>
+                </tr>
+            </table>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Notes)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BicycleId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BicycleDescription)
+        </td>
+        <td>
+          @{ string statusString;
+            if (item.IsCompleted)
+            {
+              statusString = "Completed";
+            }
+            else
+            {
+              statusString = "Active";
+            }
+            }
+            <input type="checkbox" onclick="changeStatus(@item.Id)" @check />
+          <span>@statusString</span>
+        </td>
+        <td>
+            
+            
+          @if (item.IsCompleted)
+          {
+              if (item.InvoiceId == 0)
+              {
+                 // firstInv = 1; //set on creation of the firstInvoice
+            @Html.ActionLink("Create Invoice", "../Invoice/Create", new { id = item.Id })
+            <span> | </span>}
+              else
+              {@Html.ActionLink("Print Invoice", "../Invoice/Create", new { id = item.Id })<span> | </span> }
+          }
+            @Html.Raw(invoiceAble)
+            @Html.ActionLink("Details", "Details", new { id = item.Id })
+
+
+        </td>
+    </tr>
+    }
+</table>

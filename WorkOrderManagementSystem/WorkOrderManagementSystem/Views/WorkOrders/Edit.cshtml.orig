@@ -1,0 +1,256 @@
+﻿@model WorkOrderManagementSystem.Controllers.WorkOrderEditForm
+
+@{
+    ViewBag.Title = "Edit";
+}
+<h2>Edit</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>WorkOrderEditForm</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group row col-md-12" style="align-content: center">
+            <label class="control-label col-sm-2" for="HighPriority">Set As High Priority</label>
+            <div class="checkbox col-sm-1">
+                @Html.EditorFor(model => model.HighPriority)
+                @Html.ValidationMessageFor(model => model.HighPriority, "", new { @class = "text-danger" })
+            </div>
+
+            <label class="control-label col-sm-2" for="Status">Mark As Completed</label>
+            <div class="checkbox col-sm-1">
+                @Html.EditorFor(model => model.Status)
+                @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <br>
+        <br>
+        <hr />
+        <div class="col-md-12 row">
+            <label class="control-label  col-md-2" for="CustomerId">Select A Customer</label>
+        </div>
+        <br />
+        <div class="col-md-12 " id="custList">
+            <div>
+                <input type="text" id="custSearchBox" name="custSearchBox" class="col-md-2" />
+                <input type="button" value="Search" class="btn btn-default" onclick="searchCust(custSearchBox.value)" />
+            </div>
+            @Html.DropDownList("CustomerId", Model.CustomerSearchList, new { @class = "form-control", @size = "10", @onchange = "getBikeList(this)" })
+        </div>
+        <hr />
+        <div class="col-md-12" id="bikeList">
+            <div class="form-group">
+                <label class="control-label row">Select Customer to See Related Bikes</label>
+                <div class="col-md-12">
+                    <br />
+                    @Html.DropDownListFor(m => m.BicycleId, (Model.BicycleSearchList), new { @class = "form-control", @size = "10" })
+                    @Html.ValidationMessageFor(model => model.BicycleId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.Notes, htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.TextBoxFor(model => model.Notes, new { htmlAttributes = new { @class = "form-control", @style = "width: 400px; " } })
+                @Html.ValidationMessageFor(model => model.Notes, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <hr />
+        <label class="control-label row" for="ActiveMechanicList">Assign a Mechanic (Optional)</label>
+        <br />
+        <div class="form-group col-sm-12">
+            <input type="text" id="mechSearchBox" name="mechSearchBox" class="col-md-2" />
+            <input type="button" value="Search" class="btn btn-default col-md-2" onclick="searchMech(mechSearchBox.value)" />
+
+            <div class="col-md-10" id="mechList">
+                @Html.DropDownList("ActiveMechanicId", Model.MechanicSearchList, new { @class = "form-control", @size = "10" })
+            </div>
+        </div>
+        <table id="WorkOrderLinesTable" cellspacing="3">
+<<<<<<< HEAD
+          @{ var counter = 1;
+            string selectId = "ServiceItem" + counter.ToString();
+            string priceId = "Price" + counter.ToString();
+            string quantityId = "Quantities" + counter.ToString();
+            }
+            @foreach (var item in Model.WorkOrderLines)
+            {
+                <tr>
+                    <td>
+                        <select name="ServiceItemIds" id=@selectId class="form-control" onchange = "priceForOrderLine(@selectId, @quantityId, @priceId)">
+                            @foreach (var listItem in Model.ServiceItemList)
+                            {
+                                if (listItem.Text == item.ServiceItem.Description)
+                                {
+                                    <option value="@listItem.Value" selected>@listItem.Text</option>
+                                }
+                                else
+                                {
+                                    <option value="@listItem.Value">@listItem.Text</option>
+                                }
+                            }
+                        </select>
+                    </td>
+                    <td><input type="text" name="Quantities" id=@quantityId value="@item.Quantity" onkeyup="priceForOrderLine(@selectId, @quantityId, @priceId)"/></td>
+                    <td><input type="text" name="Price" id=@priceId value="@item.LineTotal" ></td>
+                    <td><input type="button" class="BtnMinus" value="-" onclick="deleteRow(this)" /></td>                   
+                </tr>
+              counter++;
+              selectId = "ServiceItem" + counter.ToString();
+              priceId = "Price" + counter.ToString();
+              quantityId = "Quantities" + counter.ToString();
+
+            }
+          <div name=@counter id="dummy"></div>
+            <tr>
+                <div class="col-md-10">
+                    <td>@Html.DropDownList("ServiceItemIds", Model.ServiceItemList, htmlAttributes: new { @class = "form-control", @onchange = "priceForOrderLine(this)" })</td>
+=======
+            @foreach (var item in Model.WorkOrderLines)
+            {
+                <tr>
+                    <td>
+                        <select name="ServiceItemIds" id="ServiceItemIds" class="form-control">
+                            @foreach (var listItem in Model.ServiceItemList)
+                            {
+                                if (listItem.Text == item.ServiceItem.Description)
+                                {
+                                    <option value="@listItem.Value" selected>@listItem.Text</option>
+                                }
+                                else
+                                {
+                                    <option value="@listItem.Value">@listItem.Text</option>
+                                }
+                            }
+                        </select>
+                    </td>
+                    <td><input type="text" name="Quantities" id="Quantities" value="@item.Quantity" /></td>
+                    <td><input type="text" name="Price" id="Price" value="@item.LineTotal"></td>
+                    <td><input type="button" class="BtnMinus" value="-" onclick="deleteRow(this)" /></td>                   
+                </tr>
+            }
+            <tr>
+                <div class="col-md-10">
+                    <td>@Html.DropDownList("ServiceItemIds", Model.ServiceItemList, htmlAttributes: new { @class = "form-control" })</td>
+>>>>>>> 4d41b0dee3981c841093d9a2d8af3bc87aba1f45
+                    <td><input type="text" name="Quantities" id="Quantities"></td>
+                    <td><input type="text" name="Price" id="Price"></td>                   
+                </div>
+            </tr>
+        </table>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" value="Add Row" class="btn btn-default" onclick="addRow()" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+
+
+}
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/App/core.js"></script>
+<<<<<<< HEAD
+
+    <script type="text/javascript">
+
+      //NOTE: priceForOrderLine() is defined in core.js
+      var razerCount;
+      razerCount= document.getElementById('dummy');
+      razerCount = parseInt(razerCount, 10);
+      
+      var count = 0;//This needs to be changed to parse the number from SelectLists[id] ids from the most recent existing workorderline 
+                //This is achieved by using razer to create a dummy element with name= razer counter, and we can parse the count from that with javascript and DOM
+                
+      if (razerCount > 1) {
+        count = razerCount;
+      }
+=======
+    <script type="text/javascript">
+        var count = 0;
+>>>>>>> 4d41b0dee3981c841093d9a2d8af3bc87aba1f45
+        function addRow() {
+            var tr = document.createElement("tr");
+
+            var td = document.createElement("td");
+            var input = document.createElement("input");
+
+            var a = document.getElementById("ServiceItemIds");
+            var s = a.cloneNode(true);
+            s.firstChild.id = "ServiceItem" + count.toString();//this does not do anything... although I want it to...
+
+            var t = document.createTextNode("ServiceItemids");
+            tr.appendChild(t);
+
+            td.append(s);
+            tr.appendChild(td);
+
+            var td = document.createElement("td");
+            var input = document.createElement("input");
+
+            input.type = "text";
+            input.name = "Quantities";
+
+            input.id = "Quantities";
+            input.value = "0";
+
+            var t = document.createTextNode("Quantities");
+            tr.appendChild(t);
+            td.appendChild(input);
+            tr.appendChild(td);
+
+            var td = document.createElement("td");
+            var input = document.createElement("input");
+
+            input.type = "text";
+<<<<<<< HEAD
+            input.name = "Price"+count.toString();//make each row's price uniquely identifiable in the DOM
+
+            input.id = "Price" + count.toString();//make each row's price uniquely identifiable in the DOM
+=======
+            input.name = "Price";
+
+            input.id = "Price";
+>>>>>>> 4d41b0dee3981c841093d9a2d8af3bc87aba1f45
+            input.value = "0";
+
+            var t = document.createTextNode("Price");
+            tr.appendChild(t);
+            td.appendChild(input);
+            tr.appendChild(td);
+
+            var td = document.createElement("td");
+            var input = document.createElement("input");
+
+            input.type = "button";
+            input.className = "BtnMinus";
+            input.value = "-";
+            input.onclick = function () { this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode); };
+            td.appendChild(input);
+            tr.appendChild(td);
+
+            document.getElementById("WorkOrderLinesTable").appendChild(tr);
+
+            count++;
+
+        };
+        function deleteRow(elem) {
+            elem.parentNode.parentNode.parentNode.removeChild(elem.parentNode.parentNode);
+        };
+
+
+    </script>
+
+}

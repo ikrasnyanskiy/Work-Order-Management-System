@@ -1,0 +1,39 @@
+﻿@model IEnumerable<WorkOrderManagementSystem.Controllers.ReportMechanicOrderTotals>
+
+
+<table class="table">
+    <tr>
+      <td></td>
+        <th>
+            @Html.DisplayNameFor(model => model.inProgress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.completed)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+      <td>
+       <table>
+         <tr><th>Name</th><th>Email</th></tr>
+         <tr><td>@item.mechanic.FirstName @item.mechanic.LastName</td><td>@item.mechanic.Email</td></tr>
+       </table>
+      </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.inProgress)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.completed)
+        </td>
+        <td>
+            
+          @Html.ActionLink("Mechanic Details", "Details/" + item.mechanic.Id, "Mechanics")
+
+
+        </td>
+    </tr>
+}
+
+</table>

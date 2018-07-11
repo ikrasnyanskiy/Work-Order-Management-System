@@ -1,0 +1,54 @@
+﻿@model IEnumerable<WorkOrderManagementSystem.Controllers.BicycleWithAssoc>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Models</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ModelName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            Customer Name
+        </th>
+        <th>
+            Activation
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {   
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModelName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerFirstName) @Html.DisplayFor(modelItem => item.CustomerLastName)
+            </td>
+            <td>
+                @if (item.Deactivated == false)
+                {
+                    @Html.ActionLink("Deactivate", "Deactivate", new { id = item.Id },new { @style = "color:#ff0000;" })
+                }
+                else
+                {
+                    @Html.ActionLink("Activate", "Activate", new { id = item.Id }, new { @style = "color:#008000;" })
+                }
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>

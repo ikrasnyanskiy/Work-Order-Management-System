@@ -1,0 +1,86 @@
+﻿@model WorkOrderManagementSystem.Controllers.InvoiceReport
+
+@{
+  ViewBag.Title = "InvoiceReports";
+}
+
+<h2>InvoiceReports</h2>
+
+<div>
+  <h4>InvoiceReport</h4>
+  <hr />
+  <table class="table-striped">
+
+
+    <tr>
+      <td>
+        <b>Average Revenue This Week:</b>
+      </td>
+      <td>
+        @Html.DisplayFor(model => model.avgRevenueThisWeek)
+      </td>
+    </tr>
+
+    <tr>
+      <td><b>Number of Invoices This Week:</b></td>
+      <td>@Html.DisplayFor(model => model.numThisWeek)</td>
+    </tr>
+
+   
+    <tr>
+    <td><b>Average Revenue This Month:</b></td>
+
+    <td>@Html.DisplayFor(model => model.avgRevenueThisMonth)</td>
+    </tr>
+
+    <tr>
+      <td><b>Number of Invoices This Month:</b></td>
+      <td>
+        @Html.DisplayFor(model => model.numThisMonth)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <b>Average Revenue This Year:</b>
+      </td>
+
+      <td>
+        @Html.DisplayFor(model => model.avgRevenueThisYear)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <b>Number of Invoices This Year:</b>
+
+      </td>
+
+      <td>
+        @Html.DisplayFor(model => model.numThisYear)
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>Total Invoices Outstanding:</b>
+      </td>
+
+      <td>
+        @Html.DisplayFor(model => model.numOutstandingInvoices)
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>Total Revenue Outstanding (Value of Unpaid Invoices):</b>
+
+      </td>
+
+      <td>
+        @Html.DisplayFor(model => model.moneyOutstanding)
+      </td>
+    </tr>
+  </table>
+</div>
+<p>
+  @Html.ActionLink("Back to List of Reports", "Index")
+</p>

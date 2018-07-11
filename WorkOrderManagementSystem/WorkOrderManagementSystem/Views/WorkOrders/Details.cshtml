@@ -1,0 +1,211 @@
+﻿@model WorkOrderManagementSystem.Controllers.WorkOrderDetails
+
+@{
+  ViewBag.Title = "Details";
+  string name = Model.BicycleCustomerFirstName;
+
+}
+
+<h2>Details</h2>
+
+<div>
+  <h4>What are we doing to @name's bike</h4>
+  <hr />
+  <table id="details">
+    <tr>
+      <th>Date Started</th>
+      <td>@Html.DisplayFor(model => model.CreationTimeString)</td>
+
+      @{string priority = "";
+        string color = "";
+        if (Model.HighPriority == true)
+        {
+          priority = "Highest";
+          color = "color:red";
+        }
+        else
+        {
+          priority = "Regular";
+          color = "color:blue";
+        }
+      }
+
+      <th>
+        Order Priority Level
+      </th>
+      <td><span style="@color">@priority</span></td>
+
+    </tr>
+    <tr>
+      @{
+        string comped = "";
+        string fontCol = "";
+        if (Model.IsCompleted == true)
+        {
+
+          comped = "Completed";
+          fontCol = "color:red";
+        }
+        else
+        {
+          comped = "Not Done Yet";
+          fontCol = "color:blue";
+
+        }
+      }
+      <th>Status of the Work: </th>
+      <td><span style="@fontCol">@comped</span></td>
+    </tr>
+    <tr>
+      <th>
+        First Name
+      </th>
+      <td>
+        @Html.DisplayFor(model => model.BicycleCustomerFirstName)
+      </td>
+    </tr>
+    <tr>
+      <th>
+        Last Name
+      </th>
+      <td>@Html.DisplayFor(model => model.BicycleCustomerLastName)</td>
+    </tr>
+    <tr>
+      <th>
+        Email
+      </th>
+      <td>@Html.DisplayFor(model => model.BicycleCustomerEmail)</td>
+    </tr>
+    <tr>
+      <th>
+        Phone
+      </th>
+      <td>@Html.DisplayFor(model => model.BicycleCustomerPhone)</td>
+    </tr>
+    <tr>
+      <th>
+        Bicycle Id
+      </th>
+      <td>@Html.DisplayFor(model => model.BicycleId)</td>
+    </tr>
+    <tr>
+      <th>
+        Bicycle Description
+      </th>
+      <td>@Html.DisplayFor(model => model.BicycleDescription)</td>
+    </tr>
+    <tr>
+      <th>
+        Notes
+      </th>
+      <td>@Html.DisplayFor(model => model.Notes)</td>
+    </tr>
+    @*<tr>
+          <th>
+              Has been completed
+          </th>
+          <td>@Html.DisplayFor(model => model.Status)</td>
+      </tr>*@
+
+    <tr>
+      <th>Previously Assigned Mechanics:</th>
+      <td>
+        @{
+
+          <table class="table table-bordered">
+            <tr><th>Mechanic Name</th><th>Time Started</th><th>Time Stopped</th></tr>
+            @foreach (var item in Model.InactiveMechanics)
+            {
+              <tr>
+                <td>@item.Mech.FirstName @item.Mech.LastName</td>
+                <td>@item.startTime.Date.ToString("dd MMM yyyy") &nbsp @item.startTime.Hour:@item.startTime.Minute</td>
+                <td>@item.endTime.Date.ToString("dd MMM yyyy")  &nbsp @item.startTime.Hour:@item.startTime.Minute</td>
+
+              </tr>
+            }
+          </table>
+
+        }
+      </td>
+    </tr>
+    <tr>
+      <th>
+        Active Mechanic
+      </th>
+      <td>
+        @{
+          if (Model.ActiveMechanic == null)
+          {
+            <span>No mechanic is currently assigned.</span>
+          }
+          else
+          {
+            <table class="table-bordered">
+              <tr><th>Mechanic Name</th><th>Time Started</th></tr>
+              
+              <tr><td>@Model.ActiveMechanic.Mech.FirstName &nbsp @Model.ActiveMechanic.Mech.LastName</td> <td>@Model.ActiveMechanic.startTime.Date.ToString("dd MMM yyyy")  &nbsp @Model.ActiveMechanic.startTime.Hour:@Model.ActiveMechanic.startTime.Minute</td></tr>
+            </table>
+          }
+        }
+       
+      </td>
+    </tr>
+
+    <tr>
+      <th>
+        Work for mechanics:
+      </th>
+    </tr>
+    <tr>
+      <th>
+
+      </th>
+      <th>
+        Description
+      </th>
+      <th>
+        Quantity
+      </th>
+      <th>
+        Price
+      </th>
+
+    </tr>
+    @{double total = 0.0; }
+    @foreach (var item in Model.WorkOrderLines)
+    {
+
+
+      <tr>
+        <th>
+
+        </th>
+        <td>
+          @(item.ServiceItem.Description)
+        </td>
+        <td>
+          @(item.Quantity)
+        </td>
+        <td>
+          @(item.ServiceItem.Price)
+        </td>
+        @{total = total + item.LineTotal;}
+      </tr>
+          }
+
+    @{ total = total * 1.13;}
+    <tr>
+      <th colspan="2">
+        Work Order Total (with tax):
+      </th>
+      <td></td>
+      <td>
+        @String.Format("{0:c}", total)
+      </td>
+    </tr>
+  </table>
+</div>
+<p>
+  @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+  @Html.ActionLink("Back to List", "Index")
+</p>

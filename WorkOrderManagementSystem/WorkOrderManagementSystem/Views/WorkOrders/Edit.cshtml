@@ -1,0 +1,386 @@
+﻿@model WorkOrderManagementSystem.Controllers.WorkOrderEditForm
+
+@{
+  ViewBag.Title = "Edit";
+}
+<h2>Edit</h2>
+
+@using (Html.BeginForm(new { @onkeypress = "function(event){if(event.keyCode==13 || event.which==13){event.preventDefault(); event.stopPropagation();}};" }))
+{
+  @Html.AntiForgeryToken()
+
+  <div class="form-horizontal">
+    <h4>WorkOrderEditForm</h4>
+    <p class="text-danger">
+        @TempData["SubmitErrorMsg"]
+    </p>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group row col-md-12" style="align-content: center">
+      <label class="control-label col-sm-2" for="HighPriority">Set As High Priority</label>
+      <div class="checkbox col-sm-1">
+        @Html.EditorFor(model => model.HighPriority)
+        @Html.ValidationMessageFor(model => model.HighPriority, "", new { @class = "text-danger" })
+      </div>
+
+      <label class="control-label col-sm-2" for="Status">Mark As Completed</label>
+      <div class="checkbox col-sm-1">
+        @Html.EditorFor(model => model.IsCompleted)
+        @Html.ValidationMessageFor(model => model.IsCompleted, "", new { @class = "text-danger" })
+      </div>
+    </div>
+    <br>
+    <br>
+    <hr />
+    <div class="col-md-12 row">
+      <label class="control-label  col-md-2" for="CustomerId">Select A Customer</label>
+        @* Create new customer through create workorder form *@
+        <button type="button" id="createCustBtn" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="getCustCreateForModal()">
+            Create New Customer
+        </button>
+    </div>
+    <br />
+    <div class="col-md-12 ">
+      <div>
+        <input type="text" id="custSearchBox" name="custSearchBox" class="col-md-2" onkeypress="submitSearch(event)" />
+        <input type="button" id="custSearchBtn" value="Search" class="btn btn-default" onclick="searchCust(custSearchBox.value)" />
+      </div>
+      <div id="custList">
+        @Html.DropDownList("CustomerId", Model.CustomerSearchList, new { @class = "form-control", @size = "10", @onchange = "getBikeList(this)" })
+      </div>
+    </div>
+    <hr />
+    <div class="col-md-12" id="bikeList">
+      <div class="form-group">
+        <label class="control-label row">Select Customer to See Related Bikes</label>
+        <div class="col-md-12">
+          <br />
+          @Html.DropDownListFor(m => m.BicycleId, (Model.BicycleSearchList), new { @class = "form-control", @size = "10" })
+          @Html.ValidationMessageFor(model => model.BicycleId, "", new { @class = "text-danger" })
+        </div>
+      </div>
+    </div>
+    <hr />
+    <div class="form-group">
+      @Html.LabelFor(model => model.Notes, htmlAttributes: new { @class = "control-label" })
+      <div>
+        @Html.TextAreaFor(model => model.Notes, new { @rows = 5, @cols = 70, htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Notes, "", new { @class = "text-danger" })
+      </div>
+    </div>
+    <hr />
+    <label class="control-label row" for="ActiveMechanicList">Assign a Mechanic (Optional)</label>
+    <br />
+    <div class="form-group col-sm-12">
+      <input type="text" id="mechSearchBox" name="mechSearchBox" class="col-md-2" onkeypress="submitSearch(event)" />
+      <input type="button" id="mechSearchBtn" value="Search" class="btn btn-default col-md-2" onclick="searchMech(mechSearchBox.value)" />
+      <input type="button" value="Clear" class="btn btn-default col-md-2" onclick="clearSelected()" />
+
+      <div class="col-md-10" id="mechList">
+        @Html.DropDownList("ActiveMechanicId", Model.MechanicSearchList, new { @class = "form-control", @size = "10" })
+      </div>
+    </div>
+    <table id="WorkOrderLinesTable" cellspacing="3">
+      <thead>
+        <tr>
+          <th>Service Item</th>
+          <th>Quantity</th>
+          <th>Line Total</th>
+        </tr>
+      </thead>
+      @{ var counter = 1;
+        string selectId = "ServiceItem" + counter.ToString();
+        string priceId = "Price" + counter.ToString();
+        string quantityId = "Quantities" + counter.ToString();
+      }
+      @{ if (Model.WorkOrderLines.Count() == 0)
+        {
+          <tr>
+            <div class="col-md-10">
+              @{var newSelectid = "ServiceItem" + counter.ToString();}
+              @{ var defaultSelectParams = "priceForOrderLine(" + @selectId + "," + @quantityId + "," + @priceId + ");";}
+
+              <td>@Html.DropDownList("ServiceItemIds", Model.ServiceItemList, htmlAttributes: new { @id = @newSelectid, @class = "form-control", @onchange = @defaultSelectParams })</td>
+              <td><input type="text" name="Quantities" id=@quantityId onkeyup=@defaultSelectParams></td>
+              <td><input type="text" name="Price" id=@priceId></td>
+            </div>
+          </tr>
+
+                }
+
+      }
+
+
+      @foreach (var item in Model.WorkOrderLines)
+      {
+        <tr>
+          <td>
+            <select name="ServiceItemIds" id="@selectId" class="form-control" onchange="priceForOrderLine(@selectId, @quantityId, @priceId);">
+              @foreach (var listItem in Model.ServiceItemList)
+              {
+                if (listItem.Text == item.ServiceItem.Description)
+                {
+                  <option value="@listItem.Value" selected>@listItem.Text</option>
+                }
+                else
+                {
+                  <option value="@listItem.Value">@listItem.Text</option>
+                }
+              }
+            </select>
+          </td>
+          @* old with onkeyup having calcordertotal *@
+          @*<td><input type="text" name="Quantities" id="@quantityId" value="@item.Quantity" onkeyup="priceForOrderLine(@selectId, @quantityId, @priceId); setTimeout(calcOrderTotal(), 1000);" /></td>*@
+          <td><input type="text" name="Quantities" id="@quantityId" value="@item.Quantity" onkeyup="priceForOrderLine(@selectId, @quantityId, @priceId);" /></td>
+          <td><input type="text" name="Price" id=@priceId value="@item.LineTotal" readonly></td>
+          <td><input type="button" class="BtnMinus" value="-" onclick="deleteRow(this)" /></td>
+        </tr>
+        counter++;
+        selectId = "ServiceItem" + counter.ToString();
+        priceId = "Price" + counter.ToString();
+        quantityId = "Quantities" + counter.ToString();
+
+      }
+
+      @{ if (Model.WorkOrderLines.Count() != 0)
+        {
+          <tr>
+            <div class="col-md-10">
+              @{var newSelectid = "ServiceItem" + counter.ToString();}
+              @{ var defaultSelectParams = "priceForOrderLine(" + @selectId + "," + @quantityId + "," + @priceId + ");";}
+
+              <td>@Html.DropDownList("ServiceItemIds", Model.ServiceItemList, htmlAttributes: new { @id = @newSelectid, @class = "form-control", @onchange = @defaultSelectParams })</td>
+              <td><input type="text" name="Quantities" id=@quantityId onkeyup=@defaultSelectParams value="0"></td>
+              <td><input type="text" name="Price" id=@priceId value="0" readonly></td>
+              <td><input type="button" class="BtnMinus" value="-" onclick="deleteRow(this)" /></td>
+            </div>
+          </tr>
+
+         }
+      }
+
+
+    </table>
+
+    <div name="@counter" id="dummy"></div>
+    <div class="col-md-10">
+      <label>Total After Tax:</label>
+      <input type="text" id="orderTotal" value="0"/>
+    </div>
+    <div class="form-group">
+      <div class="col-md-offset-2 col-md-10">
+        <input type="button" value="Add Row" class="btn btn-default" onclick="addRow()" />
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-offset-2 col-md-10">
+        <input type="submit" id="submitEdit" usesubmitbehaviour="false" value="Save" class="btn btn-default" onload="this.blur()" />
+      </div>
+    </div>
+    <p class="text-danger">
+        @TempData["SubmitErrorMsg"]
+    </p>
+
+  </div>
+}
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Create Customer</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="createCustModal" class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+  @Html.ActionLink("Back to List", "Index")
+</div>
+@section Scripts {
+  @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/App/core.js"></script>
+    <script src="~/scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+  <script type="text/javascript">
+    
+    //NOTE: priceForOrderLine() is defined in core.js
+
+
+    //globals:
+    c = 1;//our counter for number of workorder lines (will be conditially parsed/updated in addrow())
+    //This is achieved by using razer to create a dummy element with name= razer counter, and we can parse the count from that with javascript and DOM
+    //these globals don't seem to register if declared above this function definition...
+    razerCount = document.getElementById("dummy");
+    countString = razerCount.attributes["name"].value;//NOTE: this works while document.getElementById("dummy").name does not... I don't know why...
+    countString = parseInt(countString);
+    initFlag = false;
+    if (!initFlag) {
+      c = countString;
+      initFlag == true;
+    }
+
+    calcOrderTotal();
+
+    function addRow() {
+
+      c++;
+      var tr = document.createElement("tr");
+
+      var td = document.createElement("td");
+      var input = document.createElement("input");
+      //var correctedCount = parseInt(countString) - 1;
+      var a = document.getElementById("ServiceItem1");//line with id"countString" is the only line that is not removeable (prevents null ref error when setting a)
+      var s = a.cloneNode(true);
+      s.attributes["id"].value = "ServiceItem" + c.toString();//this now works NOTE USE OF .attributes[""].value !
+      s.attributes["onchange"].value = "priceForOrderLine(ServiceItem" + c.toString() + ", Quantities" + c.toString() + ", Price" + c.toString() + ");";
+
+      // var t = document.createTextNode("ServiceItemIds");
+      // tr.appendChild(t);
+
+      td.append(s);
+      tr.appendChild(td);
+
+      var td = document.createElement("td");
+      var input = document.createElement("input");
+
+      input.type = "text";
+      input.name = "Quantities";
+
+      input.id = "Quantities" + c.toString();//NOTE THE DIFFERENCE BETWEEN SETTING ATTRIBUTES FOR SELECTLIST s and INPUT: for some reason, need to use .attributes with s, but doing so with input causes errors
+      //this is probably becuase these attributes don't exist yet with input, so we need to create them rather than trying to reference something that doesn't exist and is null
+      //element.setAttribute("key", value): sets value of existing or create if does not exist (ie is safe way of changing values)
+      input.setAttribute("onkeyup", "priceForOrderLine(ServiceItem" + c.toString() + ", Quantities" + c.toString() + ", Price" + c.toString() + ");");
+      input.value = "0";
+
+      //  var t = document.createTextNode("Quantities");
+      // tr.appendChild(t);
+      td.appendChild(input);
+      tr.appendChild(td);
+
+      var td = document.createElement("td");
+      var input = document.createElement("input");
+
+      input.type = "text";
+      input.id = "Price" + c.toString();//make each row's price uniquely identifiable in the DOM
+      input.value = "0";
+
+      //  var t = document.createTextNode("Price");
+      // tr.appendChild(t);
+      td.appendChild(input);
+      tr.appendChild(td);
+
+      var td = document.createElement("td");
+      var input = document.createElement("input");
+
+      input.type = "button";
+      input.className = "BtnMinus";
+      input.value = "-";
+      input.onclick = function () { this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode); calcOrderTotal(); };
+      td.appendChild(input);
+      tr.appendChild(td);
+
+      document.getElementById("WorkOrderLinesTable").appendChild(tr);
+    };
+    function deleteRow(elem) {
+      //c--;
+      elem.parentNode.parentNode.parentNode.removeChild(elem.parentNode.parentNode);
+      calcOrderTotal();
+    };
+
+    function calcOrderTotal() {
+      var totalPrice = 0;
+      for (var i = 0; i <= c; i++) {
+        var line = document.getElementById("Price" + i.toString());
+        if (line != null) {//hack to account for semi-broken counter, 'c'
+          var linePrice = parseInt(line.value);
+          totalPrice += linePrice;
+        }
+      }
+      totalPrice *= 1.13;//calculate Ontario HST
+      var priceElem = document.getElementById("orderTotal");
+      if (isNaN(totalPrice))
+      {
+          priceElem.value = "invalid quantity above";
+      }
+      else
+      {
+          priceElem.value = totalPrice.toFixed(2);
+      }
+    }
+  </script>
+
+    @*<script>
+        $(document).ready(function () {
+            $("#submitEdit").click(function () {
+                $("form").attr("action", "/workorders/edit");
+            });
+        });
+    </script>*@
+
+    <script>
+        function getCustCreateForModal() {
+            // Get a reference to the DOM element
+            var element = document.querySelector('#createCustModal');
+            // create an xhr object
+            var xhr = new XMLHttpRequest();
+            // configure its handler
+            xhr.onreadystatechange = function () {
+
+                if (xhr.readyState === 4) {
+                    // request-response cycle has been completed, so continue
+
+                    if (xhr.status === 200) {
+                        // request was successfully completed, and data was received, so continue
+
+                        // update the user interface
+                        element.innerHTML = xhr.responseText;
+                    } else {
+                        element.innerHTML = "<p>Request was not successful<br>(" + xhr.statusText + ")</p>";
+                    }
+                } else {
+                    //e.innerHTML = "<p>Loading...</p>";
+                }
+                // show the content
+                element.style.display = 'block';
+            }
+
+            // configure the xhr object to fetch content
+            xhr.open('GET', '/WorkOrders/createCustomerThroughWO', true);//TODO: ADDED GET style variable syntax to request URL to allow controller to recognize variable
+            // fetch the content
+            xhr.send(null);
+        }
+    </script>
+
+    <script>
+        function updateCustModal(in_data, in_status, in_xhr) {
+
+            // Get a reference to the DOM element
+            var element = document.querySelector('#createCustModal');
+
+            // create an xhr object
+            var xhr = in_xhr
+
+            element.innerHTML = xhr.responseText;
+
+            var parser = new DOMParser();
+            var data = parser.parseFromString(xhr.responseText, "text/html");
+            var firstNameElem = data.getElementById('detailsCustomerFirstName');
+            var lastNameElem = data.getElementById('detailsCustomerLastName');
+            if (firstNameElem != null && lastNameElem != null)
+            {
+                searchCust((firstNameElem.innerHTML).trim() + " " + (lastNameElem.innerHTML).trim());
+            }
+        }
+    </script>
+}

@@ -1,0 +1,250 @@
+﻿@model WorkOrderManagementSystem.Controllers.MechanicWithWorkOrders
+
+
+<h3>Active Work Orders:</h3>
+<table class="table">
+  @*table
+    work order id, customer_nested , work order notes, bicycle_id, bicycle_description, work_order_status *@
+  @{ if (Model.ActiveWorkOrders != null)
+    {
+      <tr>
+        <th>
+
+          Work Order #
+        </th>
+        <th>
+          Time Mechanic Started
+        </th>
+        <th>
+          Customer Details
+        </th>
+        <th>
+          Work Order Notes
+        </th>
+        <th>
+          Bicycle #
+        </th>
+        <th>
+          Bicycle Description
+        </th>
+        <th>
+          Completed Status <!--(click to change)-->
+        </th>
+      </tr>
+    }
+  }
+
+  @{
+    @*use string priority and terinary to either set background of row to red or null*@
+  if (Model.ActiveWorkOrders != null)
+  {
+    foreach (var activeWO in Model.ActiveWorkOrders)
+    {
+      string priority = activeWO.HighPriority == true ? "alert-danger" : null;
+      @*Status Checkbox; string "check" is for setting the checked property in the checkbox tag *@
+  string check = "";
+
+  if (activeWO.IsCompleted == true)
+  {
+    check = "checked";
+  }
+  <tr class="@priority" id="@activeWO.Id">
+    <td>
+      @Html.DisplayFor(modelItem => activeWO.Id)
+    </td>
+    <td>@activeWO.AssignedTime.Date</td>
+    <td>
+      <table>
+        <tr>
+          <th> Name</th>
+          <td>@(activeWO.BicycleCustomerFirstName + " " + activeWO.BicycleCustomerLastName)</td>
+        </tr>
+        <tr>
+          <th>Email</th>
+          <td>@(activeWO.BicycleCustomerEmail)</td>
+        </tr>
+        <tr>
+          <th>Phone</th>
+          @if (activeWO.BicycleCustomerPhone != null)
+          {
+            <td>@(activeWO.BicycleCustomerPhone.ToString())</td>
+          }
+          else
+          {
+            <td>No Phone Number</td>
+          }
+        </tr>
+      </table>
+    </td>
+    <td>
+      @Html.DisplayFor(modelItem => activeWO.Notes)
+    </td>
+    <td>
+      @Html.DisplayFor(modelItem => activeWO.BicycleId)
+    </td>
+    <td>
+      @Html.DisplayFor(modelItem => activeWO.BicycleDescription)
+    </td>
+  <!--   <td>
+     <input type="checkbox" onclick="changeStatusFromMechView(@*@Model.Id, @activeWO.Id)" @check*@ />
+    </td>
+    -->
+    @{string comp = "";
+
+      if (activeWO.IsCompleted == true)
+      {
+        comp = "Completed";
+      }
+      else
+      {
+        comp = "In Progress";
+      }
+
+    }
+    @*to show that the work order is completed*@
+
+    <td>
+      @comp
+    </td>
+    <td>
+      @Html.ActionLink("Edit", "Edit", "WorkOrders", new { id = activeWO.Id }, null) |
+      @Html.ActionLink("Details", "Details", "WorkOrders", new { id = activeWO.Id }, null)
+
+    </td>
+  </tr>
+        }
+      }
+      else
+      {
+        <p class="alert-danger">This mechanic is not Assigned to a Work Order.</p>
+      }
+  }
+
+</table>
+
+
+<!--Inactive work orders:-------------------->
+
+<hr />
+<h3>Previous Work Orders:</h3>
+
+<table class="table">
+  @{ if (Model.PreviousWorkOrders != null)
+    {
+      <tr>
+        <th>
+
+          Work Order #
+        </th>
+        <th>
+          Time Mechanic Stopped
+        </th>
+        <th>
+          Customer Details
+        </th>
+        <th>
+          Work Order Notes
+        </th>
+        <th>
+          Bicycle #
+        </th>
+        <th>
+          Bicycle Description
+        </th>
+        <th>
+          Completed Status <!--(click to change)-->
+        </th>
+      </tr>
+    }
+  }
+
+  @{
+    @*use string priority and terinary to either set background of row to red or null*@
+  if (Model.PreviousWorkOrders != null)
+  {
+    foreach (var prevWO in Model.PreviousWorkOrders)
+    {
+      string priority = prevWO.HighPriority == true ? "alert-danger" : null;
+      @*Status Checkbox; string "check" is for setting the checked property in the checkbox tag *@
+  string check = "";
+
+  if (prevWO.IsCompleted == true)
+  {
+    check = "checked";
+  }
+  <tr class="@priority" id="@prevWO.Id">
+    <td>
+      @Html.DisplayFor(modelItem => prevWO.Id)
+    </td>
+    <td>@prevWO.UnassignedTime.Date</td>
+    <td>
+      <table>
+        <tr>
+          <th> Name</th>
+          <td>@(prevWO.BicycleCustomerFirstName + " " + prevWO.BicycleCustomerLastName)</td>
+        </tr>
+        <tr>
+          <th>Email</th>
+          <td>@(prevWO.BicycleCustomerEmail)</td>
+        </tr>
+        <tr>
+          <th>Phone</th>
+          @if (prevWO.BicycleCustomerPhone != null)
+          {
+            <td>@(prevWO.BicycleCustomerPhone.ToString())</td>
+          }
+          else
+          {
+            <td>No Phone Number</td>
+          }
+        </tr>
+      </table>
+    </td>
+    <td>
+      @Html.DisplayFor(modelItem => prevWO.Notes)
+    </td>
+    <td>
+      @Html.DisplayFor(modelItem => prevWO.BicycleId)
+    </td>
+    <td>
+      @Html.DisplayFor(modelItem => prevWO.BicycleDescription)
+    </td>
+    <!--   <td>
+    <input type="checkbox" onclick="changeStatusFromMechView(@*@Model.Id, @activeWO.Id)" @check*@ />
+   </td>
+   -->
+
+
+    @{string comp = "";
+
+      if (prevWO.IsCompleted == true)
+      {
+        comp = "Completed";
+      }
+      else
+      {
+        comp = "In Progress";
+      }
+
+    }
+    @*to show that the work order is completed*@
+
+    <td>
+      @comp
+    </td>
+    <td>
+      @Html.ActionLink("Edit", "Edit", "WorkOrders", new { id = prevWO.Id }, null) |
+      @Html.ActionLink("Details", "Details", "WorkOrders", new { id = prevWO.Id }, null)
+
+    </td>
+  </tr>
+        }
+      }
+      else
+      {
+        <p class="alert-danger">This mechanic is not Assigned to a Work Order.</p>
+      }
+  }
+
+</table>
+

@@ -1,0 +1,88 @@
+﻿@model IEnumerable<WorkOrderManagementSystem.Controllers.InvoiceWithDetails>
+@{
+    ViewBag.Title = "All Paid Invoices";
+
+}
+<h2>All Paid Invoices</h2>
+<table class="table">
+    <tr>
+        <th>
+            For Work Order #
+        </th>
+        <th>
+            First Name
+        </th>
+        <th>
+            Last Name
+        </th>
+        <th>
+            Email
+        </th>
+        <th>
+            Phone Number
+        </th>
+        <th>
+            Bicycle Description
+        </th>
+        <th>
+            Model
+        </th>
+        <th>
+            Manufacturer Name
+        </th>
+        <th>
+            Creation Time
+        </th>
+
+        <th>
+            Invoice Completion Time
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.WorkOrderId)
+            </td>
+            
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerFirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerLastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerEmail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerPhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BicycleDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BicycleModelName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BicycleModelManufacturerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreationTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InvoiceCompletionTime)
+            </td>
+
+
+            <td>
+
+                @Html.ActionLink("Details", "Details", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>

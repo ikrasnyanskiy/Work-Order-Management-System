@@ -1,0 +1,11 @@
+﻿@model WorkOrderManagementSystem.Controllers.WorkOrderAddForm
+
+<div class="form-group">
+  <div class="col-md-10">
+    <label class="control-label col-md-2">Select Customer to See Related Bikes</label>
+    @Html.DropDownListFor(m => m.BicycleId, (Model.BicycleSearchList), new { @class = "form-control", @size = "10" })
+    @Html.ValidationMessageFor(model => model.BicycleId, "", new { @class = "text-danger" })
+
+
+  </div>
+</div>

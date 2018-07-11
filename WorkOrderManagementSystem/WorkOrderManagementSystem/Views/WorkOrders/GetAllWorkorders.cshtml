@@ -1,0 +1,27 @@
+﻿@model IEnumerable<WorkOrderManagementSystem.Controllers.WorkOrderGeneral>
+
+@{
+    ViewBag.Title = "All Work Orders";
+}
+
+<h2>All Work Orders</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<div class="form-group">
+    <h3>Search Work Orders</h3>
+    <input style="margin-right:10px;margin-top:4px" type="text" id="workOrderSearchBox" name="workOrderSearchBox" class="col-md-2" />
+    <input type="button" value="Search" class="btn btn-default col-md-2" onclick="searchAllWorkOrder(workOrderSearchBox.value)" />
+    <br /><br />
+</div>
+
+<div id="WorkOrderTable">
+  @Html.Partial("_WorkOrderAllTable")
+</div>
+
+@section Scripts {
+  @Scripts.Render("~/bundles/jqueryval")
+  <script src="~/Scripts/App/core.js"></script>
+}

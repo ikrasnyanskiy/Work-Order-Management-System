@@ -1,0 +1,172 @@
+﻿@model IEnumerable<WorkOrderManagementSystem.Controllers.ReportMechanicOrderTotals>
+
+@{
+    ViewBag.Title = "MechanicReports";
+}
+
+<h2>MechanicReports</h2>
+
+<p>
+  <button class="btn-group" type="button" name="weekly" onclick="getWeekly()">Week</button>
+  <button class="btn-group" type="button" name="monthly" onclick="getMonthly()">Month</button>
+  <button class="btn-group" type="button" name="yearly" onclick="getYearly()">Year</button>
+</p>
+<h1 id="timeHeading">Work Orders This Week:</h1>
+<div id="fillMe">
+
+  
+  <table class="table">
+    <tr>
+      <td></td>
+      <th>
+        @Html.DisplayNameFor(model => model.inProgress)
+      </th>
+      <th>
+        @Html.DisplayNameFor(model => model.completed)
+      </th>
+      <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+      <tr>
+        <td>
+          <table>
+            <tr><th>Name</th><th>Email</th></tr>
+            <tr><td>@item.mechanic.FirstName @item.mechanic.LastName</td><td>@item.mechanic.Email</td></tr>
+          </table>
+        </td>
+        <td>
+          @Html.DisplayFor(modelItem => item.inProgress)
+        </td>
+        <td>
+          @Html.DisplayFor(modelItem => item.completed)
+        </td>
+        <td>
+
+          @Html.ActionLink("Mechanic Details","Details/"+ item.mechanic.Id, "Mechanics")
+        </td>
+      </tr>
+    }
+
+  </table>
+</div>
+
+<script>
+  function getWeekly() {
+
+    //var element = document.getElementById('#dropOff');
+    // Get a reference to the DOM element
+    var element = document.querySelector('#fillMe');// NOTE the '#' preceding the name of the div we're updating
+    var heading = document.querySelector('#timeHeading');
+    // create an xhr object
+    var xhr = new XMLHttpRequest();
+
+    // configure its handler
+    xhr.onreadystatechange = function () {
+
+      if (xhr.readyState === 4) {
+        // request-response cycle has been completed, so continue
+
+        if (xhr.status === 200) {
+          // request was successfully completed, and data was received, so continue
+
+          // update the user interface
+          element.innerHTML = xhr.responseText;
+          heading.innerHTML = "Work Orders This Week";
+
+
+        } else {
+          element.innerHTML = "<p>Request was not successful<br>(" + xhr.statusText + ")</p>";
+        }
+      } else {
+        element.innerHTML = "<p>Loading...</p>";
+      }
+      // show the content
+      element.style.display = 'block';
+    }
+
+    // configure the xhr object to fetch content
+    xhr.open('GET', '/reports/MechAsgtWeekly', true);//TODO: ADDED GET style variable syntax to request URL to allow controller to recognize variable
+    // fetch the content
+    xhr.send(null);
+  }
+  function getMonthly() {
+
+    //var element = document.getElementById('#dropOff');
+    // Get a reference to the DOM element
+    var element = document.querySelector('#fillMe');// NOTE the '#' preceding the name of the div we're updating
+    var heading = document.querySelector('#timeHeading');
+
+    // create an xhr object
+    var xhr = new XMLHttpRequest();
+
+    // configure its handler
+    xhr.onreadystatechange = function () {
+
+      if (xhr.readyState === 4) {
+        // request-response cycle has been completed, so continue
+
+        if (xhr.status === 200) {
+          // request was successfully completed, and data was received, so continue
+
+          // update the user interface
+          element.innerHTML = xhr.responseText;
+          heading.innerHTML = "Work Orders This Month";
+
+
+        } else {
+          element.innerHTML = "<p>Request was not successful<br>(" + xhr.statusText + ")</p>";
+        }
+      } else {
+        element.innerHTML = "<p>Loading...</p>";
+      }
+      // show the content
+      element.style.display = 'block';
+    }
+
+    // configure the xhr object to fetch content
+    xhr.open('GET', '/reports/MechAsgtMonthly', true);//TODO: ADDED GET style variable syntax to request URL to allow controller to recognize variable
+    // fetch the content
+    xhr.send(null);
+  }
+  function getYearly() {
+
+    //var element = document.getElementById('#dropOff');
+    // Get a reference to the DOM element
+    var element = document.querySelector('#fillMe');// NOTE the '#' preceding the name of the div we're updating
+    var heading = document.querySelector('#timeHeading');
+
+    // create an xhr object
+    var xhr = new XMLHttpRequest();
+
+    // configure its handler
+    xhr.onreadystatechange = function () {
+
+      if (xhr.readyState === 4) {
+        // request-response cycle has been completed, so continue
+
+        if (xhr.status === 200) {
+          // request was successfully completed, and data was received, so continue
+
+          // update the user interface
+          element.innerHTML = xhr.responseText;
+          heading.innerHTML = "Work Orders This Year";
+
+
+        } else {
+          element.innerHTML = "<p>Request was not successful<br>(" + xhr.statusText + ")</p>";
+        }
+      } else {
+        element.innerHTML = "<p>Loading...</p>";
+      }
+      // show the content
+      element.style.display = 'block';
+    }
+
+    // configure the xhr object to fetch content
+    xhr.open('GET', '/reports/MechAsgtYearly', true);//TODO: ADDED GET style variable syntax to request URL to allow controller to recognize variable
+    // fetch the content
+    xhr.send(null);
+  }
+  </script>

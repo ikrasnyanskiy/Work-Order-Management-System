@@ -1,0 +1,192 @@
+﻿@model WorkOrderManagementSystem.Controllers.CustomerWithDetails
+
+@{
+    ViewBag.Title = "Details";
+    string name = Model.FirstName;
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Here are @name's contact details:</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        
+
+        <dt>
+            First Name
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            Last Name
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            Phone
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Phone)
+        </dd>
+
+        <dt>
+            Email
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+    </dl>
+</div>        
+
+@Html.ActionLink("Create New Bicycle for " + name + ":", "AddBicycle", new { id = Model.Id })<br />
+<hr />
+
+<button class="btn-group" type="button" name="butBikes" onclick="getBikes(@Model.Id)">View Bikes</button>
+<button class="btn-group" type="button" name="butWO" onclick="getWorkOrders(@Model.Id)">View Work Orders</button>
+<button class="btn-group" type="button" name="butInvoice"onclick="getInvoices(@Model.Id)">View Invoices</button>
+
+<div id="dropOff">
+    @*A div floating to be populated with items from the button push*@
+</div>
+
+
+<script>
+    function getBikes(Id) {
+
+        //var element = document.getElementById('#dropOff');
+        // Get a reference to the DOM element
+        var element = document.querySelector('#dropOff');// NOTE the '#' preceding the name of the div we're updating
+
+        // create an xhr object
+        var xhr = new XMLHttpRequest();
+
+        // configure its handler
+        xhr.onreadystatechange = function () {
+
+            if (xhr.readyState === 4) {
+                // request-response cycle has been completed, so continue
+
+                if (xhr.status === 200) {
+                    // request was successfully completed, and data was received, so continue
+
+                    // update the user interface
+                    element.innerHTML = xhr.responseText;
+
+
+
+                } else {
+                    element.innerHTML = "<p>Request was not successful<br>(" + xhr.statusText + ")</p>";
+                }
+            } else {
+                //e.innerHTML = "<p>Loading...</p>";
+            }
+            // show the content
+            element.style.display = 'block';
+        }
+
+        // configure the xhr object to fetch content
+        xhr.open('GET', '/Customers/getbikesforcustomer/?Id=' + parseInt(Id), true);//TODO: ADDED GET style variable syntax to request URL to allow controller to recognize variable
+        // fetch the content
+        xhr.send(null);
+    }
+
+
+    //getWorkOrders script onclick of button on form
+    function getWorkOrders(Id) {
+
+        //var element = document.getElementById('#dropOff');
+        // Get a reference to the DOM element
+        var element = document.querySelector('#dropOff');// NOTE the '#' preceding the name of the div we're updating
+
+        // create an xhr object
+        var xhr = new XMLHttpRequest();
+
+        // configure its handler
+        xhr.onreadystatechange = function () {
+
+            if (xhr.readyState === 4) {
+                // request-response cycle has been completed, so continue
+
+                if (xhr.status === 200) {
+                    // request was successfully completed, and data was received, so continue
+
+                    // update the user interface
+                    element.innerHTML = xhr.responseText;
+
+
+
+                } else {
+                    element.innerHTML = "<p>Request was not successful<br>(" + xhr.statusText + ")</p>";
+                }
+            } else {
+                //e.innerHTML = "<p>Loading...</p>";
+            }
+            // show the content
+            element.style.display = 'block';
+        }
+
+        // configure the xhr object to fetch content
+        xhr.open('GET', '/Customers/getworkordersforcustomer/?Id=' + parseInt(Id), true);//TODO: ADDED GET style variable syntax to request URL to allow controller to recognize variable
+        // fetch the content
+        xhr.send(null);
+    }
+
+    //GET INVOICES BY ID
+    function getInvoices(Id) {
+
+        //var element = document.getElementById('#dropOff');
+        // Get a reference to the DOM element
+        var element = document.querySelector('#dropOff');// NOTE the '#' preceding the name of the div we're updating
+
+        // create an xhr object
+        var xhr = new XMLHttpRequest();
+
+        // configure its handler
+        xhr.onreadystatechange = function () {
+
+            if (xhr.readyState === 4) {
+                // request-response cycle has been completed, so continue
+
+                if (xhr.status === 200) {
+                    // request was successfully completed, and data was received, so continue
+
+                    // update the user interface
+                    element.innerHTML = xhr.responseText;
+
+
+
+                } else {
+                    element.innerHTML = "<p>Request was not successful<br>(" + xhr.statusText + ")";
+                }
+            } else {
+                //e.innerHTML = "<p>Loading...</p>";
+            }
+            // show the content
+            element.style.display = 'block';
+        }
+
+        // configure the xhr object to fetch content 
+        xhr.open('GET', '/Customers/getinvoicesforcustomer/?Id=' + parseInt(Id), true);//TODO: ADDED GET style variable syntax to request URL to allow controller to recognize variable
+        // fetch the content
+        xhr.send(null);
+    }
+
+
+</script>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+@*@*Added a button to click to get the bike list
+            <button type="button" id="bikeButton" onclick="getBikeList(@Model.Id)">Add and View Customer Bikes</button>
+    **@

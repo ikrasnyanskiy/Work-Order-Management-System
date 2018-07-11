@@ -1,0 +1,114 @@
+﻿@model IEnumerable<WorkOrderManagementSystem.Controllers.WorkOrderGeneral>
+
+@{
+  ViewBag.Title = "Index";
+}
+
+<h2>Work Orders In Action</h2>
+
+@*<p>
+      @Html.ActionLink("Create New", "Create")
+  </p>*@
+
+@*Nested tables to hold the view of the work order
+  first table will work order
+  nested in second column is customer details table
+*@
+<table class="table">
+  @*table
+    work order id, customer_nested , work order notes, bicycle_id, bicycle_description, work_order_status *@
+  <tr>
+    <th>
+      Work Order #
+    </th>
+    <th>
+      Customer Details
+    </th>
+    <th>
+      Work Order Notes
+    </th>
+    <th>
+      Bicycle #
+    </th>
+    <th>
+      Bicycle Description
+    </th>
+    <th>
+      Work Order Status
+    </th>
+    <th>
+      Active Mechanic
+    </th>
+
+  </tr>
+
+  @foreach (var item in Model)
+  {
+    @*use string priority and terinary to either set background of row to red or null*@
+  string priority = item.HighPriority == true ? "alert-danger" : null;
+  @*
+    badge property
+  *@
+  string mechName = "";
+  string active = "";
+  if (item.ActiveMechanic != null)
+  {
+    mechName = item.ActiveMechanic.FirstName + " " + item.ActiveMechanic.LastName;
+    active = item.ActiveMechanic != null ? "badge" : null;
+  }
+  else
+  {
+    mechName = "No mechanic assigned";
+  }
+  <tr class="@priority" id="@item.Id">
+    <td>
+      @Html.DisplayFor(modelItem => item.Id)
+    </td>
+    <td>
+      <table>
+        <tr>
+          <th> Name</th>
+          <td>@(item.BicycleCustomerFirstName + " " + item.BicycleCustomerLastName)</td>
+        </tr>
+
+        <tr>
+          <th>Email</th>
+          <td>@item.BicycleCustomerEmail</td>
+        </tr>
+        <tr>
+          <th>Phone</th>
+          <td>@item.BicycleCustomerPhone.ToString()</td>
+        </tr>
+
+      </table>
+    </td>
+    <td>
+      @Html.DisplayFor(modelItem => item.Notes)
+    </td>
+
+    <td>
+      @Html.DisplayFor(modelItem => item.BicycleId)
+    </td>
+    <td>
+      @Html.DisplayFor(modelItem => item.BicycleDescription)
+    </td>
+    <td>
+      @*
+                      TODO: replace this with AJAX populated checkbox that will also update the work order status when clicked?
+        @Html.DisplayFor(modelItem => item.Status)
+      *@
+      @item.Status
+    </td>
+    <td>
+      <p><span style="color:blue" class="@active">@mechName</span></p>
+    </td>
+
+    <td>
+      @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+      @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+      @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+    </td>
+  </tr>
+  }
+
+</table>

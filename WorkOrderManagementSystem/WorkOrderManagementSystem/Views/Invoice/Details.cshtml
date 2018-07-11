@@ -1,0 +1,21 @@
+﻿@model WorkOrderManagementSystem.Controllers.InvoiceWithDetails
+
+@{
+
+    string firstName = Model.CustomerFirstName;
+    ViewBag.Title = firstName + "'s Invoice";
+
+
+}
+<script src="~/Scripts/App/core.js"></script>
+<h2>Invoice for @firstName</h2>
+
+
+    
+   
+<div id="InvoiceTable">
+    @Html.Partial("_InvoiceMoreDetailed")
+    </div>
+
+
+

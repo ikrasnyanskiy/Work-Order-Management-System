@@ -1,0 +1,126 @@
+﻿@model WorkOrderManagementSystem.Controllers.InvoiceWithDetails
+
+
+    <h4>InvoiceWithDetails</h4>
+    <hr />
+ <script src="~/Scripts/App/core.js"></script>  
+
+<table class="table-bordered, table-striped" border="1">
+    <tr>
+        <th>
+            Has been paid?
+        </th>
+        <td>@{string check = "";
+            if (Model.IsPaid == true)
+            {
+                check = "checked";
+            }
+        }
+            <input type="checkbox" onclick="changePaidStatus(@Model.Id)" @check />
+        </td>
+        <th>Invoice for Work Order Id#:</th>
+        <td colspan="3">@Html.DisplayFor(model => model.WorkOrderId)</td>
+    </tr>
+
+    <tr>
+
+        <th>Invoice First Created:</th>
+        <td colspan="2">
+            @Html.DisplayFor(model => model.CreationTime)
+        </td>
+        <th>
+            Customer Id:
+        </th>
+        <td colspan="2">
+            @Html.DisplayFor(model => model.CustomerId)
+        </td>
+    </tr>
+
+    <tr>
+
+        <th>
+            First Name
+        </th>
+        <td colspan="2">
+            @Html.DisplayFor(model => model.CustomerFirstName)
+        </td>
+        <th>
+            Phone Number
+        </th>
+
+        <td colspan="2">
+            @Html.DisplayFor(model => model.CustomerPhoneNumber)
+        </td>
+
+    </tr>
+
+    <tr>
+        <th>
+            Last Name
+        </th>
+        <td colspan="2">@Html.DisplayFor(model => model.CustomerLastName)</td>
+
+        <th>
+            Customer Email
+        </th>
+
+        <td colspan="2">
+            @Html.DisplayFor(model => model.CustomerEmail)
+        </td>
+
+    </tr>
+    <tr>
+        <th>Bicycle Manufacturer</th>
+        <td colspan="2">@Html.DisplayFor(model => model.BicycleModelManufacturerName)</td>
+
+        <th>Bicycle Model</th>
+        <td colspan="2">@Html.DisplayFor(model => model.BicycleModelName)</td>
+    </tr>
+
+    <tr>
+
+        <th>Bicycle Description</th>
+        <td colspan="5">@Html.DisplayFor(model => model.BicycleDescription)</td>
+    </tr>
+
+
+    <tr>
+        <th colspan="2">Service Description</th>
+        <th colspan="2">Quantity</th>
+        <th colspan="2">Price/Unit</th>
+
+    </tr>
+    @{
+        foreach (var line in Model.InvoiceLines)
+        {
+            <tr>
+                <td colspan="2">@line.ServiceDescription</td>
+                <td colspan="2">@line.Quantity </td>
+                <td colspan="2">@line.ServicePrice</td>
+
+            </tr>
+        }
+    }
+
+    <tr>
+        <td colspan="2"></td>
+
+        <td colspan="2"><strong>Subtotal</strong></td>
+        <td colspan="2"> @Html.DisplayFor(model => model.Subtotal)</td>
+    </tr>
+    <tr>
+        <td colspan="2"></td>
+
+        <td colspan="2"><strong>Total With Tax (13%)</strong></td>
+        <td colspan="2"> @Html.DisplayFor(model => model.Total)</td>
+    </tr>
+
+</table>
+
+<p>
+    @Html.ActionLink("Back to Completed Work Order List", "GetAllCompletedWO", "WorkOrders/GetAllCompletedWO") |
+    @Html.ActionLink("All Invoices List", "Index", "Invoice/Index") 
+</p>
+
+
+

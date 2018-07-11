@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewBag.Title = "Reports";
+}
+
+<h2>Reports</h2>
+
+<table class="table">
+    <tr>
+        <th>Category</th>
+        <th>Report Name</th>
+        <th>Link</th>
+    </tr>
+    <tr>
+        <td>Manufacturer</td>
+        <td>Manufacturer Popularity</td>
+        <td>@Html.ActionLink("View", "ManufacturerPopularity")</td>
+    </tr>
+    <tr>
+        <td>Service Item</td>
+        <td>Service Item Popularity</td>
+        <td>@Html.ActionLink("View", "ServiceItemPopularity")</td>
+    </tr>
+  <tr>
+    <td>Mechanic</td>
+    <td>Mechanic Work Order Assignments (last week/month/year)</td>
+    <td>@Html.ActionLink("View", "MechanicReports")</td>
+  </tr>
+  <tr>
+    <td>Invoices</td>
+    <td>Invoice Stats</td>
+    <td>@Html.ActionLink("View", "InvoiceReports")</td>
+  </tr>
+</table>
+
